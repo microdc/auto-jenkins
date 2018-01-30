@@ -22,10 +22,12 @@ kubectl apply -f <(cat k8s.yaml.template | envsubst)
 ```
 
 ## Generate plugins.txt
-From time to time we may need to generate a complete plugins list. The original was generated from a container running locally like so:
+From time to time we may need to generate a complete plugins list. This was generated from a container
+following the original jenkins documentation [here](https://github.com/jenkinsci/docker/blob/master/README.md), like so:
 ```
 JENKINS_HOST=admin:admin@localhost:8080
-curl -sSL "http://$JENKINS_HOST/pluginManager/api/xml?depth=1&xpath=/*/*/shortName|/*/*/version&wrapper=plugins" | perl -pe 's/.*?<shortName>([\w-]+).*?<version>([^<]+)()(<\/\w+>)+/\1 \2\n/g'|sed 's/ /:/'
+curl -sSL "http://$JENKINS_HOST/pluginManager/api/xml?depth=1&xpath=/*/*/shortName|/*/*/version&wrapper=plugins" | \
+          perl -pe 's/.*?<shortName>([\w-]+).*?<version>([^<]+)()(<\/\w+>)+/\1 \2\n/g'|sed 's/ /:/' | \
+          sort
 ```
-This follows the original jenkins documnetation [here](https://github.com/jenkinsci/docker/blob/master/README.md)
 

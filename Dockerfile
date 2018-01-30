@@ -7,7 +7,7 @@ RUN ./test.sh
 # Skip initial setup
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:2.104-alpine
 # General Jenkins settings
 COPY groovy/settings.groovy /usr/share/jenkins/ref/init.groovy.d/settings.groovy
 
