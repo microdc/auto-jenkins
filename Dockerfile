@@ -4,6 +4,8 @@ WORKDIR /app
 COPY ./ /app/
 RUN ./test.sh
 
+# Skip initial setup
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
 FROM jenkins/jenkins:lts
 # General Jenkins settings
@@ -20,5 +22,6 @@ COPY log.properties /var/jenkins_home/log.properties
 # Install plugins
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
-# Dont run the setup wizard
-RUN echo '2.0' > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state
+
+RUN echo 2 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state
+RUN echo 2 > /usr/share/jenkins/ref/jenkins.install.InstallUtil.lastExecVersion
