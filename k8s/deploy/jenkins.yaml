@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: master
-        image: jenkins/jenkins:2.103
+        image: equalexpertsmicrodc/k8s-jenkins:latest
         ports:
         - containerPort: 8080
         - containerPort: 50000
