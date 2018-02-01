@@ -1,17 +1,17 @@
 # k8s-jenkins
-Kubernetes deployment of Jenkins
+Automated Jenkins build with sensible plugins and no setup wizard intended to run CI/CD on Kubernetes
 
 Available on [Docker hub](https://hub.docker.com/r/equalexpertsmicrodc/k8s-jenkins/)
 
 ### Build
 ```
 export VERSION='latest'
-docker build --rm -t "equalexpertsmicrodc/jenkins:${VERSION}" .
+docker build --rm -t "equalexpertsmicrodc/k8s-jenkins:${VERSION}" .
 ```
 
 ### Local run example
 ```
-docker run --rm -p 8080:8080 -p 50000:50000 equalexpertsmicrodc/jenkins:latest
+docker run --rm -p 8080:8080 -p 50000:50000 equalexpertsmicrodc/k8s-jenkins:latest
 ```
 
 ## Kubernetes deployment
