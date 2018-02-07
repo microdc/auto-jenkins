@@ -29,3 +29,7 @@ RUN echo 2 > /usr/share/jenkins/ref/jenkins.install.InstallUtil.lastExecVersion
 # Bootstrap our ci jobs with these scripts
 COPY groovy/initseed.groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY jobdsl /usr/share/jenkins/ref/jobdsl/
+
+# Custom entry point to allow for download of jobdsl files from repos
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
