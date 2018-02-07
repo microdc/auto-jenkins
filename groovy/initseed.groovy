@@ -9,7 +9,7 @@ def jenkinshome = Jenkins.getInstance().getRootDir().getPath()
 
 def jobManagement = new JenkinsJobManagement(System.out, [:], new File('.'))
 
-def filename = [ jenkinshome, 'jobdsl', 'seed.groovy' ].join(File.separator)
+def filename = [ jenkinshome, 'jobdsl', 'seed.jobdsl' ].join(File.separator)
 
 def scriptRequest = new ScriptRequest(new File(filename).text,
                                       new File('.').toURI().toURL(),
