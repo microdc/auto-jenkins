@@ -3,6 +3,7 @@ pipelineJob("k8s-jenkins") {
         daysToKeep(14)
         artifactNumToKeep(3)
     }
+    cron()
     definition {
         cpsScm {
             scm {
