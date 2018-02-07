@@ -1,0 +1,24 @@
+#!/bin/bash
+
+check_dependancy() {
+  local DEPENDANCY="${1}"
+  command -v "${DEPENDANCY}" >/dev/null 2>&1 || err "${DEPENDANCY} is required but not installed.  Aborting."
+}
+
+err() {
+  echo -e "[ERR] ${1}"
+  exit 1
+}
+
+log() {
+  echo -e "[LOG] ${1}"
+}
+
+main () {
+  check_dependancy docker
+
+  export VERSION='latest'
+  docker build --rm -t "equalexpertsmicrodc/k8s-jenkins:${VERSION}" .
+}
+
+main "$@"
