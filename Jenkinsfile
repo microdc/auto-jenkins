@@ -1,5 +1,3 @@
-//  Jenkinsfile to create the deploy-containers job
-
 pipeline {
     agent any
     stages {
