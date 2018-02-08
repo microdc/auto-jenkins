@@ -7,6 +7,8 @@ Available on [Docker hub](https://hub.docker.com/r/equalexpertsmicrodc/k8s-jenki
 ```
 export VERSION='latest'
 docker build --rm -t "equalexpertsmicrodc/k8s-jenkins:${VERSION}" .
+# OR
+./build.sh
 ```
 
 ### Local run example
