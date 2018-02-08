@@ -1,0 +1,20 @@
+pipelineJob("k8s-jenkins") {
+    logRotator {
+        daysToKeep(14)
+        artifactNumToKeep(3)
+    }
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        github('EqualExpertsMicroDC/k8s-jenkins', 'https', 'github.com')
+                    }
+                    branch('*/master')
+                }
+            }
+            scriptPath('Jenkinsfile')
+        }
+    }
+}
+
