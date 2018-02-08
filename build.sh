@@ -17,8 +17,9 @@ log() {
 main () {
   check_dependency docker
 
-  export VERSION='latest'
-  docker build --rm -t "equalexpertsmicrodc/k8s-jenkins:${VERSION}" .
+  export VERSION="${VERSION:-'latest'}"
+  docker build --rm -t "equalexpertsmicrodc/k8s-jenkins" .
+  docker tag "equalexpertsmicrodc/k8s-jenkins" "equalexpertsmicrodc/k8s-jenkins:${VERSION}"
 }
 
 main "$@"
