@@ -1,6 +1,6 @@
 #!/bin/bash
 
-check_dependancy() {
+check_dependency() {
   local DEPENDANCY="${1}"
   command -v "${DEPENDANCY}" >/dev/null 2>&1 || err "${DEPENDANCY} is required but not installed.  Aborting."
 }
@@ -27,8 +27,8 @@ test_yaml_files () {
 }
 
 main () {
-  check_dependancy shellcheck
-  check_dependancy python3
+  check_dependency shellcheck
+  check_dependency python3
   case $1 in
     shell)
         test_shell_files
