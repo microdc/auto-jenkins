@@ -3,9 +3,7 @@
 usage() {
   echo """
   USAGE
-  --jobdslurls='url1;url2'  List urls of jobdsl files
-  --sshprivatekey='privatekey'  Generic private key for version control auth
-  --sshpublickey='publickey'    The public key for the private key above, mainly so its not lost
+  --jobdslrepos='url1;url2'  List urls of jobdsl files
   """
   exit 0
 }
@@ -19,14 +17,8 @@ main() {
         --help)
             usage
             ;;
-        --jobdslurls)
-            OPTION_JOB_DSL_URLS="${VALUE}"
-            ;;
-        --sshprivatekey)
-            OPTION_SSH_PRIAVTE_KEY="${VALUE}"
-            ;;
-        --sshpublickey)
-            OPTION_SSH_PUBLIC_KEY="${VALUE}"
+        --jobdslrepos)
+            OPTION_JOB_DSL_REPO="${VALUE}"
             ;;
         *)
             JENKINS_PARAMS="${JENKINS_PARAMS} ${1}"
@@ -36,20 +28,15 @@ main() {
   done
 
   JENKINS_HOME="/var/jenkins_home"
+  JOBDSL_DIR="${JENKINS_HOME}/jobdsl"
 
   # Get gob dsl files from urls
-  for DSL_FILE_URL in $(echo "${OPTION_JOB_DSL_URLS}" | tr ";" "\n"); do
-    JOBDSL_DIR="${JENKINS_HOME}/jobdsl"
+  for DSL_FILE_REPO in $(echo "${OPTION_JOB_DSL_REPO}" | tr ";" "\n"); do
     mkdir -vp "${JOBDSL_DIR}"
-    echo "From ${DSL_FILE_URL} to ${JOBDSL_DIR}"
-    wget -q "${DSL_FILE_URL}" -P "${JOBDSL_DIR}"
+    git clone --depth 1 "git@bitbucket.org:${DSL_FILE_REPO}" "/tmp/${DSL_FILE_REPO#*/}"
+    mv -v "/tmp/${DSL_FILE_REPO#*/}/${DSL_FILE_REPO#*/}.jobdsl" "${JOBDSL_DIR}"
+    rm -rfv "/tmp/${DSL_FILE_REPO#*/}"
   done
-
-  # Store ssh key in jenkins home
-  JENKINS_SSH_DIR="${JENKINS_HOME}/.ssh"
-  mkdir -vp "${JENKINS_SSH_DIR}"
-  echo "${OPTION_SSH_PRIAVTE_KEY}" > "${JENKINS_SSH_DIR}/id_rsa"
-  echo "${OPTION_SSH_PUBLIC_KEY}" >"${JENKINS_SSH_DIR}/id_rsa.pub"
 
   echo "START JENKINS:"
 
