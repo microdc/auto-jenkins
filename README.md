@@ -33,3 +33,13 @@ curl -sSL "http://$JENKINS_HOST/pluginManager/api/xml?depth=1&xpath=/*/*/shortNa
           sort
 ```
 
+## Generate and use an SSH key for bitbucket/github on k8s
+```
+export DATE=$(date '+%Y-%m-%d')
+mkdir -vp "${HOME}/.ssh/jenkins"
+ssh-keygen \
+    -t rsa -b 4096 -C "Jenkins ${DATE}" \
+    -f "${HOME}/.ssh/jenkins/id_rsa"
+
+kubectl create secret generic jenkins-ssh-keys --from-file="${HOME}/.ssh/jenkins/id_rsa" --from-file="${HOME}/.ssh/jenkins/id_rsa".pub
+```
