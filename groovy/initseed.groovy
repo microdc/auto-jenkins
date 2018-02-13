@@ -1,5 +1,9 @@
 println 'Running initseed.groovy'
 
+import hudson.model.*
+import hudson.AbortException
+import hudson.console.HyperlinkNote
+import java.util.concurrent.CancellationException
 import jenkins.model.Jenkins
 import javaposse.jobdsl.dsl.DslScriptLoader
 import javaposse.jobdsl.dsl.ScriptRequest
@@ -19,3 +23,14 @@ def dslScriptLoader =
   new DslScriptLoader(jobManagement).runScripts([scriptRequest])
 dslScriptLoader.jobs.each { e -> println e.jobName }
 dslScriptLoader.views.each { e -> println e.name }
+
+//run the seed job
+def job = Hudson.instance.getJob('seed')
+def anotherBuild
+try {
+    def future = job.scheduleBuild2(0)
+    println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + job.url, job.fullDisplayName)
+    anotherBuild = future.get()
+} catch (CancellationException x) {
+    throw new AbortException("${job.fullDisplayName} aborted.")
+}
