@@ -40,6 +40,14 @@ mkdir -vp "${HOME}/.ssh/jenkins"
 ssh-keygen \
     -t rsa -b 4096 -C "Jenkins ${DATE}" \
     -f "${HOME}/.ssh/jenkins/id_rsa"
+cat > "${HOME}/.ssh/jenkins/config" << EOF
+Host *
+  StrictHostKeyChecking no
+EOF
 
-kubectl create secret generic jenkins-ssh-keys --from-file="${HOME}/.ssh/jenkins/id_rsa" --from-file="${HOME}/.ssh/jenkins/id_rsa".pub
+kubectl create secret generic jenkins-ssh-keys --from-file="${HOME}/.ssh/jenkins/id_rsa" \
+                                               --from-file="${HOME}/.ssh/jenkins/id_rsa".pub \
+                                               --from-file="${HOME}/.ssh/jenkins/known_hosts" \
+                                               --from-file="${HOME}/.ssh/jenkins/config" \
+                                               -n jenkins
 ```

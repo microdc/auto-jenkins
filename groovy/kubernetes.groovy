@@ -1,3 +1,5 @@
+println 'Configuring Kubernetes plugin'
+
 import org.csanchez.jenkins.plugins.kubernetes.*
 import jenkins.model.*
 
