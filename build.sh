@@ -18,8 +18,8 @@ main () {
   check_dependency docker
 
   export VERSION='latest'
-  docker build --rm -t "equalexpertsmicrodc/k8s-jenkins:${VERSION}" .
-  docker tag "equalexpertsmicrodc/k8s-jenkins:${VERSION}" "equalexpertsmicrodc/k8s-jenkins:latest"
+  docker build --rm -t "microdc/k8s-jenkins:${VERSION}" .
+  docker tag "microdc/k8s-jenkins:${VERSION}" "microdc/k8s-jenkins:latest"
 }
 
 main "$@"

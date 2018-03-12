@@ -1,4 +1,4 @@
-FROM equalexpertsmicrodc/ubuntu-testing-container
+FROM microdc/ubuntu-testing-container
 RUN mkdir /app
 WORKDIR /app
 COPY ./ /app/
