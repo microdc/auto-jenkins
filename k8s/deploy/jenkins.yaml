@@ -13,6 +13,7 @@ spec:
       containers:
       - name: master
         image: equalexpertsmicrodc/k8s-jenkins:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         - containerPort: 50000
@@ -27,9 +28,15 @@ spec:
         env:
         - name: JAVA_OPTS
           value: '-Xmx1400m'
+        - name: JOB_DSL_URLS
+          value: ""
+        args: ["--jobdslurls=$(JOB_DSL_URLS)"]
         volumeMounts:
         - mountPath: /var/jenkins_home
           name: jenkins-home
+        - mountPath: "/var/jenkins_home/.ssh"
+          name: jenkins-ssh-keys
+          readOnly: true
         resources:
           limits:
             cpu: 500m
@@ -40,3 +47,7 @@ spec:
       volumes:
       - name: jenkins-home
         emptyDir: {}
+      - name: jenkins-ssh-keys
+        secret:
+          secretName: jenkins-ssh-keys
+
