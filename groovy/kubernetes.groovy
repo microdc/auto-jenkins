@@ -20,20 +20,20 @@ kubernetes.setServerUrl('https://kubernetes.default.svc.cluster.local')
 kubernetes.setJenkinsTunnel('jenkins-discovery.jenkins.svc.cluster.local:50000')
 kubernetes.setMaxRequestsPerHostStr('32')
 
-def JnlpContainer = new ContainerTemplate('jnlp')
-JnlpContainer.setName('jnlp')
-JnlpContainer.setImage('jenkinsci/jnlp-slave')
-JnlpContainer.setCommand('')
-JnlpContainer.setArgs('')
-JnlpContainer.setTtyEnabled(true)
+def jnlpContainer = new ContainerTemplate('jnlp')
+jnlpContainer.setName('jnlp')
+jnlpContainer.setImage('jenkinsci/jnlp-slave')
+jnlpContainer.setCommand('')
+jnlpContainer.setArgs('')
+jnlpContainer.setTtyEnabled(true)
 
-def JenkinsSlavePod = new PodTemplate()
-JenkinsSlavePod.setName('jenkins-slave')
-JenkinsSlavePod.setNamespace('jenkins')
-JenkinsSlavePod.setLabel('jenkins-slave')
-JenkinsSlavePod.setContainers([JnlpContainer])
+def jenkinsSlavePod = new PodTemplate()
+jenkinsSlavePod.setName('jenkins-slave')
+jenkinsSlavePod.setNamespace('jenkins')
+jenkinsSlavePod.setLabel('jenkins-slave')
+jenkinsSlavePod.setContainers([jnlpContainer])
 
-kubernetes.addTemplate(JenkinsSlavePod)
+kubernetes.addTemplate(jenkinsSlavePod)
 
 def KubectlContainer = new ContainerTemplate('kubectl')
 KubectlContainer.setName('kubectl')
@@ -42,12 +42,12 @@ KubectlContainer.setCommand('cat')
 KubectlContainer.setArgs('')
 KubectlContainer.setTtyEnabled(true)
 
-def DockerUML = new ContainerTemplate('docker')
-DockerUML.setName('docker')
-DockerUML.setImage('microdc/docker-uml:latest')
-DockerUML.setArgs('sleep inf')
-DockerUML.setTtyEnabled(true)
-DockerUML.setEnvVars([
+def dockerUML = new ContainerTemplate('docker')
+dockerUML.setName('docker')
+dockerUML.setImage('microdc/docker-uml:latest')
+dockerUML.setArgs('sleep inf')
+dockerUML.setTtyEnabled(true)
+dockerUML.setEnvVars([
   new KeyValueEnvVar('DISK', '90G'),
   new KeyValueEnvVar('MEM', '4G'),
   new KeyValueEnvVar('AWS_DEFAULT_REGION', 'eu-west-1'),
@@ -55,17 +55,17 @@ DockerUML.setEnvVars([
   new SecretEnvVar('AWS_SECRET_ACCESS_KEY', 'aws', 'AWS_SECRET_ACCESS_KEY'),
 ])
 
-def buildpod = new PodTemplate()
-buildpod.setName('buildpod')
-buildpod.setNamespace('jenkins')
-buildpod.setLabel('buildpod')
-buildpod.setVolumes([
+def buildPod = new PodTemplate()
+buildPod.setName('buildpod')
+buildPod.setNamespace('jenkins')
+buildPod.setLabel('buildpod')
+buildPod.setVolumes([
   new SecretVolume('/home/jenkins/.ssh', 'jenkins-ssh-keys'),
 ])
-buildpod.setContainers([KubectlContainer, DockerUML])
+buildPod.setContainers([KubectlContainer, dockerUML])
 
-kubernetes.addTemplate(buildpod)
-kubernetes.addTemplate(JenkinsSlavePod)
+kubernetes.addTemplate(buildPod)
+kubernetes.addTemplate(jenkinsSlavePod)
 
 jenkins.clouds.replace(kubernetes)
 jenkins.save()
