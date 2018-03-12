@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: master
-        image: equalexpertsmicrodc/k8s-jenkins:latest
+        image: microdc/k8s-jenkins:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
