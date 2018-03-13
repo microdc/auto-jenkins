@@ -34,9 +34,9 @@ spec:
         env:
         - name: JAVA_OPTS
           value: '-Xmx1400m'
-        - name: JOB_DSL_URLS
-          value: "${JOB_DSL_URLS}"
-        args: ["--jobdslurls=$(JOB_DSL_URLS)"]
+        - name: JOB_DSL_REPOS
+          value: "${JOB_DSL_REPOS}"
+        args: ["--jobdslrepos=$(JOB_DSL_REPOS)"]
         volumeMounts:
         - mountPath: /var/jenkins_home
           name: jenkins-home

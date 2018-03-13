@@ -18,7 +18,7 @@ docker run --rm -p 8080:8080 -p 50000:50000 microdc/k8s-jenkins:latest
 
 ## Kubernetes deployment
 ```
-export JOB_DSL_URLS="microdc/k8s-jenkins" #this is currently bitbucket only use an empty string for github
+export JOB_DSL_REPOS="microdc/k8s-jenkins" #this is currently bitbucket only use an empty string for github
 kubectl apply -f <(cat k8s.yaml.template | envsubst)
 ```
 
