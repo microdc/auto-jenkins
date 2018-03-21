@@ -1,3 +1,4 @@
+import jenkins.model.*
 import com.smartcodeltd.jenkinsci.plugins.buildmonitor.*
   
 def name = 'build_monitor'
