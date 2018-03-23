@@ -17,7 +17,7 @@ log() {
 main () {
   check_dependency docker
 
-  export VERSION='latest'
+  VERSION=${VERSION-'latest'}
   docker build --rm -t "microdc/k8s-jenkins:${VERSION}" .
   docker tag "microdc/k8s-jenkins:${VERSION}" "microdc/k8s-jenkins:latest"
 }
