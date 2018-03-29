@@ -14,74 +14,84 @@ spec:
   template:
     metadata:
       labels:
-        app: master
+        app: jenkins-master
     spec:
       containers:
-      - name: master
-        image: microdc/k8s-jenkins:1.2.1
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        - containerPort: 50000
-        readinessProbe:
-          httpGet:
-            path: /login
-            port: 8080
-          periodSeconds: 10
-          timeoutSeconds: 5
-          successThreshold: 2
-          failureThreshold: 5
-        env:
-        - name: JAVA_OPTS
-          value: '-Xmx1400m'
-        - name: JOB_DSL_REPOS
-          value: "${JOB_DSL_REPOS}"
-        args: ["--jobdslrepos=$(JOB_DSL_REPOS)"]
-        volumeMounts:
-        - mountPath: /var/jenkins_home
-          name: jenkins-home
-        - mountPath: "/var/jenkins_home/.ssh"
-          name: jenkins-ssh-keys
-          readOnly: true
-        resources:
-          limits:
-            cpu: 500m
-            memory: 1500Mi
-          requests:
-            cpu: 500m
-            memory: 1500Mi
+        - name: jenkins-master
+          image: microdc/k8s-jenkins:local
+          ports:
+            - containerPort: 8080
+            - containerPort: 50000
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 2
+            failureThreshold: 5
+          livenessProbe:
+            timeoutSeconds: 10
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 300
+          env:
+            - name: JAVA_OPTS
+              value: '-Xmx1400m'
+          volumeMounts:
+            - mountPath: /var/jenkins_home
+              name: jenkins-home
+            - mountPath: "/var/jenkins_home/.ssh"
+              name: jenkins-ssh-config
+              readOnly: true
+            - mountPath: "/usr/share/jenkins/data"
+              name: jenkins-git-repos
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1500Mi
+            requests:
+              cpu: 500m
+              memory: 1500Mi
       volumes:
-      - name: jenkins-home
-        emptyDir: {}
-      - name: jenkins-ssh-keys
-        secret:
-          secretName: jenkins-ssh-keys
+        - name: jenkins-home
+          emptyDir: {}
+        - name: jenkins-ssh-config
+          secret:
+            secretName: jenkins-ssh-config
+        - name: jenkins-git-repos
+          configMap:
+            name: jenkins-git-repos
+            items:
+              - key: repos.txt
+                path: repos.txt
 ---
-  kind: Service
-  apiVersion: v1
-  metadata:
-    name: jenkins-discovery
-    namespace: jenkins
-  spec:
-    selector:
-      app: master
-    ports:
-      - protocol: TCP
-        port: 50000
-        targetPort: 50000
-        name: slaves
+kind: Service
+apiVersion: v1
+metadata:
+  name: jenkins-discovery
+  namespace: jenkins
+spec:
+  selector:
+    app: jenkins-master
+  ports:
+    - protocol: TCP
+      port: 50000
+      targetPort: 50000
+      name: slaves
 ---
-  kind: Service
-  apiVersion: v1
-  metadata:
-    name: jenkins-ui
-    namespace: jenkins
-  spec:
-    type: NodePort
-    selector:
-      app: master
-    ports:
-      - protocol: TCP
-        port: 8080
-        targetPort: 8080
-        name: ui
+kind: Service
+apiVersion: v1
+metadata:
+  name: jenkins-ui
+  namespace: jenkins
+spec:
+  type: NodePort
+  selector:
+    app: jenkins-master
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: ui
