@@ -1,0 +1,2 @@
+github.com:microdc/k8s-jenkins-pipeline-tester
+github.com:microdc/k8s-jenkins
