@@ -1,4 +1,4 @@
-FROM microdc/ubuntu-testing-container
+FROM microdc/ubuntu-testing-container:v0.0.1
 RUN mkdir /app
 WORKDIR /app
 COPY ./ /app/

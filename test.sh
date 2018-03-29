@@ -21,14 +21,16 @@ test_shell_files () {
 
 test_yaml_files () {
   log "Testing yaml files"
-  for file in $(find . -name '*.y*ml'); do
-    python3 -c 'import yaml,sys;yaml.safe_load(sys.stdin)' < "${file}" || err "${file} has syntax errors"
-  done
+  yamllint .
+  #for file in $(find . -name '*.y*ml'); do
+  #  python3 -c 'import yaml,sys;yaml.safe_load(sys.stdin)' < "${file}" || err "${file} has syntax errors"
+  #done
 }
 
 main () {
   check_dependency shellcheck
   check_dependency python3
+  check_dependency yamllint
   case $1 in
     shell)
         test_shell_files
