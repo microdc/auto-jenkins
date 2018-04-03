@@ -1,8 +1,7 @@
 println 'Configuring Kubernetes plugin'
 
 import org.csanchez.jenkins.plugins.kubernetes.*
-import org.csanchez.jenkins.plugins.kubernetes.model.*;
-import org.csanchez.jenkins.plugins.kubernetes.volumes.*;
+import org.csanchez.jenkins.plugins.kubernetes.volumes.*
 import jenkins.model.*
 
 def jenkins = Jenkins.getInstance()
@@ -22,52 +21,39 @@ kubernetes.setMaxRequestsPerHostStr('32')
 
 def jnlpContainer = new ContainerTemplate('jnlp')
 jnlpContainer.setName('jnlp')
-jnlpContainer.setImage('jenkinsci/jnlp-slave')
+jnlpContainer.setImage('jenkins/jnlp-slave:3.19-1-alpine')
 jnlpContainer.setCommand('')
 jnlpContainer.setArgs('')
 jnlpContainer.setTtyEnabled(true)
+
+def dockerContainer = new ContainerTemplate('docker')
+dockerContainer.setName('docker')
+dockerContainer.setImage('docker:18.03.0-ce')
+dockerContainer.setCommand('')
+dockerContainer.setArgs('cat')
+dockerContainer.setTtyEnabled(true)
+
+def kubectlContainer = new ContainerTemplate('kubectl')
+kubectlContainer.setName('kubectl')
+kubectlContainer.setImage('lachlanevenson/k8s-kubectl:v1.10.0')
+kubectlContainer.setCommand('cat')
+kubectlContainer.setArgs('')
+kubectlContainer.setTtyEnabled(true)
 
 def jenkinsSlavePod = new PodTemplate()
 jenkinsSlavePod.setName('jenkins-slave')
 jenkinsSlavePod.setNamespace('jenkins')
 jenkinsSlavePod.setLabel('jenkins-slave')
-jenkinsSlavePod.setContainers([jnlpContainer])
-
-kubernetes.addTemplate(jenkinsSlavePod)
-
-def KubectlContainer = new ContainerTemplate('kubectl')
-KubectlContainer.setName('kubectl')
-KubectlContainer.setImage('lachlanevenson/k8s-kubectl:latest')
-KubectlContainer.setCommand('cat')
-KubectlContainer.setArgs('')
-KubectlContainer.setTtyEnabled(true)
-
-def dockerUML = new ContainerTemplate('docker')
-dockerUML.setName('docker')
-dockerUML.setImage('microdc/docker-uml:latest')
-dockerUML.setArgs('sleep inf')
-dockerUML.setTtyEnabled(true)
-dockerUML.setEnvVars([
-  new KeyValueEnvVar('DISK', '90G'),
-  new KeyValueEnvVar('MEM', '4G'),
-  new KeyValueEnvVar('AWS_DEFAULT_REGION', 'eu-west-1'),
-  new SecretEnvVar('AWS_ACCESS_KEY_ID', 'aws', 'AWS_ACCESS_KEY_ID'),
-  new SecretEnvVar('AWS_SECRET_ACCESS_KEY', 'aws', 'AWS_SECRET_ACCESS_KEY'),
+jenkinsSlavePod.setVolumes([
+  new HostPathVolume('/var/run/docker.sock', '/var/run/docker.sock'),
+  new SecretVolume('/home/jenkins/.ssh', 'jenkins-ssh-config'),
 ])
+jenkinsSlavePod.setContainers([jnlpContainer, dockerContainer, kubectlContainer])
 
-def buildPod = new PodTemplate()
-buildPod.setName('buildpod')
-buildPod.setNamespace('jenkins')
-buildPod.setLabel('buildpod')
-buildPod.setVolumes([
-  new SecretVolume('/home/jenkins/.ssh', 'jenkins-ssh-keys'),
-])
-buildPod.setContainers([KubectlContainer, dockerUML])
-
-kubernetes.addTemplate(buildPod)
 kubernetes.addTemplate(jenkinsSlavePod)
 
 jenkins.clouds.replace(kubernetes)
 jenkins.save()
 
 println 'Kubernetes plugin configuration complete'
+

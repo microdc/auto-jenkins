@@ -34,3 +34,5 @@ try {
 } catch (CancellationException x) {
     throw new AbortException("${job.fullDisplayName} aborted.")
 }
+
+Jenkins.instance.save()

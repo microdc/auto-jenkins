@@ -11,14 +11,9 @@ usage() {
 main() {
 
   while [ "$1" != "" ]; do
-    PARAM=$(echo "$1" | awk -F= '{print $1}')
-    VALUE=$(echo "$1" | awk -F= '{print $2}')
     case $PARAM in
         --help)
             usage
-            ;;
-        --jobdslrepos)
-            OPTION_JOB_DSL_REPO="${VALUE}"
             ;;
         *)
             JENKINS_PARAMS="${JENKINS_PARAMS} ${1}"
@@ -29,14 +24,20 @@ main() {
 
   JENKINS_HOME="/var/jenkins_home"
   JOBDSL_DIR="${JENKINS_HOME}/jobdsl"
+  REPOS_FILE="/usr/share/jenkins/data/repos.txt"
 
-  # Get gob dsl files from urls
-  for DSL_FILE_REPO in $(echo "${OPTION_JOB_DSL_REPO}" | tr ";" "\n"); do
+  # Get gob dsl files from git repos
+  if [ -f ${REPOS_FILE} ]; then
+    echo "${REPOS_FILE} found!"
     mkdir -vp "${JOBDSL_DIR}"
-    git clone --depth 1 "git@bitbucket.org:${DSL_FILE_REPO}" "/tmp/${DSL_FILE_REPO#*/}"
-    mv -v "/tmp/${DSL_FILE_REPO#*/}/${DSL_FILE_REPO#*/}.jobdsl" "${JOBDSL_DIR}"
-    rm -rfv "/tmp/${DSL_FILE_REPO#*/}"
-  done
+    while IFS='' read -r repo || [[ -n "$repo" ]]; do
+      git clone --depth 1 "git@${repo}" "/tmp/${repo#*/}"
+      mv -v "/tmp/${repo#*/}/${repo#*/}.jobdsl" "${JOBDSL_DIR}"
+      rm -rfv "/tmp/${repo#*/}"
+    done < "${REPOS_FILE}"
+  else
+    echo "${REPOS_FILE} does not exist, this should be mounted in"
+  fi
 
   echo "START JENKINS:"
 
