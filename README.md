@@ -39,6 +39,10 @@ docker build --rm -t "microdc/k8s-jenkins:local" .
 1. Follow the instruction for 'Deploy on Kubernetes'
 
 ## Deploy on Kubernetes
+1. Create a namespace for jenkins
+```
+kubectl create namespace jenkins
+```
 1. Create a config map for the git repos you will use (example file repos.txt)
 ```
 kubectl create configmap jenkins-git-repos -n jenkins --from-file=repos.txt
@@ -59,6 +63,12 @@ kubectl create secret generic jenkins-ssh-config -n jenkins \
                                                  --from-file="${HOME}/.ssh/jenkins/id_rsa" \
                                                  --from-file="${HOME}/.ssh/jenkins/id_rsa.pub"
 ```
+1. Run in the config
+```
+kubectl apply -f k8s.yaml
+```
+
+1. Access using $(minikube ip) and NodePort port.
 
 
 ## Generate plugins.txt
