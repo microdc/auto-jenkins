@@ -3,7 +3,15 @@ Automated Jenkins build with sensible plugins and no setup wizard intended to ru
 
 Available on [Docker hub](https://hub.docker.com/r/microdc/k8s-jenkins/)
 
-### Build
+  * [k8s-jenkins](#k8s-jenkins)
+    * [Build](#build)
+    * [Local run example](#local-run-example)
+    * [Testing using Minikube](#testing-using-minikube)
+    * [Deploy on Kubernetes](#deploy-on-kubernetes)
+    * [Generate plugins.txt](#generate-pluginstxt)
+
+## Build
+
 ```
 export VERSION='local'
 docker build --rm -t "microdc/k8s-jenkins:${VERSION}" .
@@ -12,8 +20,8 @@ docker build --rm -t "microdc/k8s-jenkins:${VERSION}" .
 
 ```
 
-### Local run example
-This is only useful for testing changes to jenkins config. If you want to test kubernetes specific functionality follow the procedure below.
+## Local run example
+This is only useful for testing changes to jenkins config. If you want to test kubernetes specific functionality follow the procedure below.  See step 3 below to generate the config files.
 ```
 docker run --rm -p 8080:8080 -p 50000:50000 \
                 -v "${PWD}/repos.txt":/usr/share/jenkins/data/repos.txt \
