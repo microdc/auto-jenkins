@@ -71,6 +71,7 @@ EOF
 4. Add the ssh configuration to Kubernetes
 ```
 kubectl create secret generic jenkins-ssh-config -n jenkins \
+                                                 --from-file="${HOME}/.ssh/jenkins/config" \
                                                  --from-file="${HOME}/.ssh/jenkins/id_rsa" \
                                                  --from-file="${HOME}/.ssh/jenkins/id_rsa.pub"
 ```
