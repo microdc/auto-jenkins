@@ -56,6 +56,7 @@ kubectl create namespace jenkins
 kubectl create configmap jenkins-git-repos -n jenkins --from-file=repos.txt
 ```
 3. Create Jenkins ssh config and keys secrets in Kubernetes
+SSH keys are for git repos. The public keys generated here will need to be uploaded to your git provider.
 ```
 export DATE=$(date '+%Y-%m-%d')
 mkdir -vp "${HOME}/.ssh/jenkins"
@@ -71,6 +72,7 @@ EOF
 4. Add the ssh configuration to Kubernetes
 ```
 kubectl create secret generic jenkins-ssh-config -n jenkins \
+                                                 --from-file="${HOME}/.ssh/jenkins/config" \
                                                  --from-file="${HOME}/.ssh/jenkins/id_rsa" \
                                                  --from-file="${HOME}/.ssh/jenkins/id_rsa.pub"
 ```
