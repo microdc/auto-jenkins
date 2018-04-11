@@ -1,8 +1,8 @@
 #!/bin/bash
 
 check_dependency() {
-  local DEPENDANCY="${1}"
-  command -v "${DEPENDANCY}" >/dev/null 2>&1 || err "${DEPENDANCY} is required but not installed.  Aborting."
+  local DEPENDENCY="${1}"
+  command -v "${DEPENDENCY}" >/dev/null 2>&1 || err "${DEPENDENCY} is required but not installed.  Aborting."
 }
 
 err() {
