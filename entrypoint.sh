@@ -11,12 +11,13 @@ usage() {
 main() {
 
   while [ "$1" != "" ]; do
-    case $PARAM in
+    local PARAM=$1
+    case ${PARAM} in
         --help)
             usage
             ;;
         *)
-            JENKINS_PARAMS="${JENKINS_PARAMS} ${1}"
+            JENKINS_PARAMS="${JENKINS_PARAMS} ${PARAM}"
             ;;
     esac
     shift
