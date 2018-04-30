@@ -1,3 +1,7 @@
+/*
+Create the initial seed job
+*/
+
 println 'Running initseed.groovy'
 
 import hudson.model.*

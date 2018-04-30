@@ -1,3 +1,6 @@
+/*
+Set up the ssh keys to be used with git
+*/
 import jenkins.model.*
 import com.cloudbees.plugins.credentials.*
 import com.cloudbees.plugins.credentials.common.*
