@@ -1,3 +1,6 @@
+/*
+Set the Jenkins admin and admin password from environment variables. (see Dockerfile)
+*/
 import jenkins.model.*
 import hudson.security.*
 

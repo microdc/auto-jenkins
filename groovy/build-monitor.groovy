@@ -1,3 +1,7 @@
+/*
+Create build monitor consisting of all jobs that end in -build
+*/
+
 import jenkins.model.*
 import com.smartcodeltd.jenkinsci.plugins.buildmonitor.*
 
