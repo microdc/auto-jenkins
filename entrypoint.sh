@@ -30,13 +30,13 @@ main() {
   JOBDSL_DIR="${JENKINS_HOME}/jobdsl"
   REPOS_FILE="/usr/share/jenkins/data/repos.txt"
 
-  # Get gob dsl files from git repos
+  # Get job dsl files from git repos
   if [ -f ${REPOS_FILE} ]; then
     echo "${REPOS_FILE} found!"
-    mkdir -vp "${JOBDSL_DIR}"
+    su-exec jenkins mkdir -vp "${JOBDSL_DIR}"
     while IFS='' read -r repo || [[ -n "$repo" ]]; do
-      git clone --depth 1 "git@${repo}" "/tmp/${repo#*/}"
-      mv -v "/tmp/${repo#*/}/${repo#*/}.jobdsl" "${JOBDSL_DIR}"
+      su-exec jenkins git clone --depth 1 "git@${repo}" "/tmp/${repo#*/}"
+      su-exec jenkins mv -v "/tmp/${repo#*/}/${repo#*/}.jobdsl" "${JOBDSL_DIR}"
       rm -rfv "/tmp/${repo#*/}"
     done < "${REPOS_FILE}"
   else
@@ -45,7 +45,7 @@ main() {
 
   echo "START JENKINS:"
 
-  /bin/bash -c "/usr/local/bin/jenkins.sh ${JENKINS_PARAMS}"
+  /bin/bash -c "su-exec jenkins /usr/local/bin/jenkins.sh ${JENKINS_PARAMS}"
 
 }
 
