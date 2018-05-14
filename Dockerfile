@@ -7,7 +7,7 @@ RUN ./test.sh
 # Skip initial setup
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
-FROM jenkins/jenkins:2.119-alpine
+FROM jenkins/jenkins:2.121-alpine
 
 # Set the default admin user and password
 ENV JENKINS_USER admin
