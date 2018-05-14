@@ -43,6 +43,17 @@ main() {
     echo "${REPOS_FILE} does not exist, this should be mounted in"
   fi
 
+  #Detect host docker socker perms
+  DOCKER_SOCKET=/var/run/docker.sock
+  DOCKER_GROUP=docker
+
+  if [ -S ${DOCKER_SOCKET} ]; then
+      DOCKER_GID="$(stat -c '%g' ${DOCKER_SOCKET})"
+      groupdel "${DOCKER_GROUP}"
+      groupadd -for -g "${DOCKER_GID}" "${DOCKER_GROUP}"
+      usermod -aG "${DOCKER_GROUP}" "jenkins"
+  fi
+
   echo "START JENKINS:"
 
   /bin/bash -c "su-exec jenkins /usr/local/bin/jenkins.sh ${JENKINS_PARAMS}"
