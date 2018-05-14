@@ -1,9 +1,12 @@
 #!/bin/bash
 
+set -e
+
 usage() {
   echo """
   USAGE
-  --jobdslrepos='url1;url2'  List urls of jobdsl files
+  entrypoint.sh JENKINS_PARAMS
+                --help #this page
   """
   exit 0
 }
