@@ -31,4 +31,28 @@ COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 
 # Custom entry point to allow for download of jobdsl files from repos
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Install docker
+USER root
+#RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
+ENV DOCKER_CHANNEL stable
+ENV DOCKER_VERSION 18.03.1-ce
+RUN echo 'docker:x:1001:jenkins' >> /etc/group
+RUN set -ex; \
+  dockerArch="$(apk --print-arch)"; \
+  if ! curl -fL -o docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/${dockerArch}/docker-${DOCKER_VERSION}.tgz"; then \
+    echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
+    exit 1; \
+  fi; \
+  tar --extract --file docker.tgz --strip-components 1 --directory /usr/local/bin/ ; \
+  rm docker.tgz; \
+  dockerd -v; \
+  docker -v
+
+COPY modprobe.sh /usr/local/bin/modprobe
+
+
+USER jenkins
+
+
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
