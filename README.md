@@ -46,6 +46,11 @@ docker build --rm -t "microdc/k8s-jenkins:local" .
 ```
 5. Follow the instruction for 'Deploy on Kubernetes'
 
+**_Minikube tip_**
+_To upload a container you've already built on your laptop to your minikube deploy run the following. This is also means your builds persist across destruction of your minikube cluster_
+`docker save microdc/k8s-jenkins:local | (eval $(minikube docker-env) && docker load)`
+
+
 ## Deploy on Kubernetes
 1. Run kubectl to create the deployment and Jenkins Namespace. The containers wont run until the config is created below.
 ```
