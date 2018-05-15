@@ -82,7 +82,8 @@ kubectl create secret generic jenkins-ssh-config -n jenkins \
                                                  --from-file="${HOME}/.ssh/jenkins/id_rsa.pub"
 ```
 
-5. Access using $(minikube ip) and NodePort port.
+5. Access using the jenkins UI
+`minikube service jenkins-ui -n jenkins --url`
 
 
 ## Generate plugins.txt
