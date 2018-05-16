@@ -22,8 +22,8 @@ COPY log.properties /var/jenkins_home/log.properties
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
-RUN echo 2 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state
-RUN echo 2 > /usr/share/jenkins/ref/jenkins.install.InstallUtil.lastExecVersion
+RUN echo 2 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state && \
+    echo 2 > /usr/share/jenkins/ref/jenkins.install.InstallUtil.lastExecVersion
 
 # Copy Jenkins groovy configuration scripts
 COPY groovy /usr/share/jenkins/ref/init.groovy.d/
@@ -40,6 +40,9 @@ RUN apk --no-cache add shadow su-exec docker
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 COPY modprobe.sh /usr/local/bin/modprobe
+
+#Install kubectl
+RUN curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.1/bin/linux/amd64/kubectl && chmod +x /usr/bin/kubectl
 
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
