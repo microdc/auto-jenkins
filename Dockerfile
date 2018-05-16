@@ -1,3 +1,4 @@
+# lint the yaml files and check the shell scripts
 FROM microdc/ubuntu-testing-container:v0.0.1
 RUN mkdir /app
 WORKDIR /app
@@ -7,7 +8,7 @@ RUN ./test.sh
 # Skip initial setup
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
-FROM jenkins/jenkins:2.121-alpine
+FROM jenkins/jenkins:2.122-alpine
 
 USER jenkins
 
