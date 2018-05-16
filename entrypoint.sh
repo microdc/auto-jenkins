@@ -1,9 +1,12 @@
 #!/bin/bash
 
+set -e
+
 usage() {
   echo """
   USAGE
-  --jobdslrepos='url1;url2'  List urls of jobdsl files
+  entrypoint.sh JENKINS_PARAMS
+                --help #this page
   """
   exit 0
 }
@@ -27,22 +30,33 @@ main() {
   JOBDSL_DIR="${JENKINS_HOME}/jobdsl"
   REPOS_FILE="/usr/share/jenkins/data/repos.txt"
 
-  # Get gob dsl files from git repos
+  # Get job dsl files from git repos
   if [ -f ${REPOS_FILE} ]; then
     echo "${REPOS_FILE} found!"
-    mkdir -vp "${JOBDSL_DIR}"
+    su-exec jenkins mkdir -vp "${JOBDSL_DIR}"
     while IFS='' read -r repo || [[ -n "$repo" ]]; do
-      git clone --depth 1 "git@${repo}" "/tmp/${repo#*/}"
-      mv -v "/tmp/${repo#*/}/${repo#*/}.jobdsl" "${JOBDSL_DIR}"
+      su-exec jenkins git clone --depth 1 "git@${repo}" "/tmp/${repo#*/}"
+      su-exec jenkins mv -v "/tmp/${repo#*/}/${repo#*/}.jobdsl" "${JOBDSL_DIR}"
       rm -rfv "/tmp/${repo#*/}"
     done < "${REPOS_FILE}"
   else
     echo "${REPOS_FILE} does not exist, this should be mounted in"
   fi
 
+  #Detect host docker socker perms
+  DOCKER_SOCKET=/var/run/docker.sock
+  DOCKER_GROUP=docker
+
+  if [ -S ${DOCKER_SOCKET} ]; then
+      DOCKER_GID="$(stat -c '%g' ${DOCKER_SOCKET})"
+      groupdel "${DOCKER_GROUP}"
+      groupadd -for -g "${DOCKER_GID}" "${DOCKER_GROUP}"
+      usermod -aG "${DOCKER_GROUP}" "jenkins"
+  fi
+
   echo "START JENKINS:"
 
-  /bin/bash -c "/usr/local/bin/jenkins.sh ${JENKINS_PARAMS}"
+  /bin/bash -c "su-exec jenkins /usr/local/bin/jenkins.sh ${JENKINS_PARAMS}"
 
 }
 

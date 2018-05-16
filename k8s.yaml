@@ -49,6 +49,8 @@ spec:
               readOnly: true
             - mountPath: "/usr/share/jenkins/data"
               name: jenkins-git-repos
+            - mountPath: /var/run/docker.sock
+              name: docker-sock-volume
           resources:
             limits:
               cpu: 500m
@@ -68,6 +70,9 @@ spec:
             items:
               - key: repos.txt
                 path: repos.txt
+        - name: docker-sock-volume
+          hostPath:
+            path: /var/run/docker.sock
 ---
 kind: Service
 apiVersion: v1
