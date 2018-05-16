@@ -44,5 +44,8 @@ COPY modprobe.sh /usr/local/bin/modprobe
 #Install kubectl
 RUN curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.1/bin/linux/amd64/kubectl && chmod +x /usr/bin/kubectl
 
+#Install aws cli
+RUN apk --no-cache add groff python py-pip && \
+    pip install awscli==1.15.21 s3cmd==2.0.1
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
