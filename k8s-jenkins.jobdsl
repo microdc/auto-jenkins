@@ -37,10 +37,6 @@ multibranchPipelineJob("${appName}-build") {
     }
   }
 
-  triggers {
-            periodic(2)
-        }
-
 configure {
       def traits = it / sources / data / 'jenkins.branch.BranchSource' / source / traits
       traits << 'jenkins.plugins.git.traits.BranchDiscoveryTrait' {}

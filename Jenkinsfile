@@ -1,19 +1,20 @@
 def appName = 'k8s-jenkins'
 def gitProvider = 'github.com'
 def appRepo = "microdc/${appName}"
-def label = "${UUID.randomUUID().toString()}"
+def nameSpace = jenkins
+
 
 node() {
 
-def repo = checkout scm
-def gitVersion = sh(returnStdout: true, script: 'git describe --tags --dirty=.dirty').trim()
+  def repo = checkout scm
+  def gitVersion = sh(returnStdout: true, script: 'git describe --tags --dirty=.dirty').trim()
 
   stage('Checkout repo') {
     git url: "git@${gitProvider}:${appRepo}.git"
   }
 
   stage('Build') {
-      sh "/bin/sh build.sh"
+      sh "VERSION=${gitVersion} ./build.sh"
   }
 
   stage('Update deployment') {
