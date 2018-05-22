@@ -76,6 +76,69 @@ spec:
           hostPath:
             path: /var/run/docker.sock
 ---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins-slave
+  namespace: jenkins
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: jenkins-slave
+      annotations:
+        iam.amazonaws.com/role: jenkins-access
+    spec:
+      serviceAccountName: jenkins
+      automountServiceAccountToken: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: name
+                operator: In
+                values:
+                - jenkins-slave
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: jenkins-slave
+          image: microdc/jenkins-auto-jnlp-slave:1.0.0
+          env:
+            - name: JAVA_OPTS
+              value: '-Xmx1400m'
+            - name: JENKINS_URL
+              value: 'http://jenkins:8080'
+            - name: JENKINS_AUTH
+              value: 'registrator:sdfkjh73234kjhsdf123123asfdasd'
+            - name: JENKINS_SLAVE_NUM_EXECUTORS
+              value: '2'
+          volumeMounts:
+            - mountPath: /var/jenkins_home
+              name: jenkins-home
+            - mountPath: "/var/jenkins_home/.ssh"
+              name: jenkins-ssh-config
+              readOnly: true
+            - mountPath: /var/run/docker.sock
+              name: docker-sock-volume
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1500Mi
+            requests:
+              cpu: 500m
+              memory: 1500Mi
+      volumes:
+        - name: jenkins-home
+          emptyDir: {}
+        - name: jenkins-ssh-config
+          secret:
+            secretName: jenkins-ssh-config
+        - name: docker-sock-volume
+          hostPath:
+            path: /var/run/docker.sock
+---
 kind: Service
 apiVersion: v1
 metadata:
