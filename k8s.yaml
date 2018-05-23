@@ -95,13 +95,13 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: name
-                operator: In
-                values:
-                - jenkins-slave
-            topologyKey: "kubernetes.io/hostname"
+            - labelSelector:
+                matchExpressions:
+                  - key: name
+                    operator: In
+                    values:
+                      - jenkins-slave
+              topologyKey: "kubernetes.io/hostname"
       containers:
         - name: jenkins-slave
           image: microdc/jenkins-auto-jnlp-slave:1.0.0
