@@ -22,7 +22,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: jenkins-master
-          image: microdc/k8s-jenkins:local
+          image: microdc/k8s-jenkins:latest
           ports:
             - containerPort: 8080
             - containerPort: 50000
