@@ -22,7 +22,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: jenkins-master
-          image: microdc/k8s-jenkins:local
+          image: microdc/k8s-jenkins:latest
           ports:
             - containerPort: 8080
             - containerPort: 50000
@@ -163,17 +163,17 @@ metadata:
   name: jenkins
   namespace: jenkins
 ---
-kind: Role
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: jenkins
   namespace: jenkins
 rules:
-  - apiGroups: [""]
-    resources: ["pods"]
+  - apiGroups: ["extensions"]
+    resources: ["deployments", "replicasets"]
     verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
   - apiGroups: [""]
-    resources: ["pods/exec"]
+    resources: ["pods/exec", "pods"]
     verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
   - apiGroups: [""]
     resources: ["pods/log"]
@@ -181,16 +181,23 @@ rules:
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "create"]
+  - apiGroups: [""]
+    resources: ["namespace", "namespaces"]
+    verbs: ["get", "patch", "create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: jenkins
   namespace: jenkins
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: jenkins
 subjects:
   - kind: ServiceAccount
     name: jenkins
+    namespace: jenkins
