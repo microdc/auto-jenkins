@@ -15,7 +15,7 @@ String keyfile = "/var/jenkins_home/.ssh/id_rsa"
 
 privateKey = new BasicSSHUserPrivateKey(
 CredentialsScope.GLOBAL,
-null,
+'gitcreds',
 'gitcreds',
 new BasicSSHUserPrivateKey.FileOnMasterPrivateKeySource(keyfile),
 "",
