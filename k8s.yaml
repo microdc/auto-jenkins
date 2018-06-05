@@ -43,6 +43,16 @@ spec:
           env:
             - name: JAVA_OPTS
               value: '-Xmx1400m'
+            - name: JENKINS_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-admin-creds
+                  key: username
+            - name: JENKINS_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-admin-creds
+                  key: password
           volumeMounts:
             - mountPath: /var/jenkins_home
               name: jenkins-home
