@@ -86,7 +86,12 @@ kubectl create secret generic jenkins-ssh-config -n jenkins \
 kubectl create secret generic jenkins-admin-creds -n jenkins --from-literal=username=admin --from-literal=password=admin
 ```
 
-6. Access using the jenkins UI
+6. Add additional secrets to jenkins environment variables (key: value)
+```
+kubectl create secret generic jenkins-secret-env-vars -n jenkins --from-file="secrets.yaml"
+```
+
+7. Access using the jenkins UI
 `kubectl port-forward service/jenkins 8080 -n jenkins`
 
 

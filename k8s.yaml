@@ -61,6 +61,8 @@ spec:
               readOnly: true
             - mountPath: "/usr/share/jenkins/data"
               name: jenkins-git-repos
+            - mountPath: "/usr/share/jenkins/secrets"
+              name: jenkins-secret-env-vars
             - mountPath: /var/run/docker.sock
               name: docker-sock-volume
           resources:
@@ -82,6 +84,12 @@ spec:
             items:
               - key: repos.txt
                 path: repos.txt
+        - name: jenkins-secret-env-vars
+          secret:
+            secretName: jenkins-secret-env-vars
+            items:
+              - key: secrets.yaml
+                path: secrets.yaml
         - name: docker-sock-volume
           hostPath:
             path: /var/run/docker.sock
