@@ -94,6 +94,16 @@ kubectl create secret generic jenkins-secret-env-vars -n jenkins --from-file="se
 7. Access using the jenkins UI
 `kubectl port-forward service/jenkins 8080 -n jenkins`
 
+# Accessing Jenkins externally
+If you need to access Jenkins externally I recommend you use an [oauth2 proxy](https://github.com/microdc/oauth2-proxy).
+It's more secure than Jenkins and allows you to utilise the user management features of a 3rd party service like google or github.
+Once you've chosen how Jenkins will be exposed you will need to set up a service or ingress to allow access. Jenkins should be configured with an external url so that links work etc.
+This is set when Jenkins starts by a groovy script that looks for the EXTERNAL_URL variable below.
+```
+      - env:
+        - name: EXTERNAL_URL
+          value: https://jenkins.microdc.example/
+```
 
 ## Generate plugins.txt
 From time to time we may need to generate a complete plugins list. This was generated from a container
