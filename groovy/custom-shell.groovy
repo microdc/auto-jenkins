@@ -9,6 +9,6 @@ jenkins_shell = System.getenv("JENKINS_SHELL")
 if (jenkins_shell) {
   jenkins = Jenkins.getInstance()
   Shell.DescriptorImpl shell = jenkins.getExtensionList(Shell.DescriptorImpl.class).get(0)
-  shell.setShell("/bin/bash")
+  shell.setShell(jenkins_shell)
   shell.save()
 }
