@@ -49,4 +49,7 @@ RUN curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-releas
 RUN apk --no-cache add groff python py-pip && \
     pip install awscli==1.15.21 s3cmd==2.0.1
 
+#Install envsubst
+RUN apk --no-cache add gettext
+
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
