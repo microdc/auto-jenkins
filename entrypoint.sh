@@ -49,9 +49,9 @@ main() {
 
   if [ -S ${DOCKER_SOCKET} ]; then
       DOCKER_GID="$(stat -c '%g' ${DOCKER_SOCKET})"
-      groupdel "${DOCKER_GROUP}"
-      groupadd -for -g "${DOCKER_GID}" "${DOCKER_GROUP}"
-      usermod -aG "${DOCKER_GROUP}" "jenkins"
+      /usr/sbin/delgroup "${DOCKER_GROUP}"
+      /usr/sbin/addgroup -S -g "${DOCKER_GID}" "${DOCKER_GROUP}"
+      /usr/sbin/addgroup "jenkins" "${DOCKER_GROUP}"
   fi
 
   echo "START JENKINS:"

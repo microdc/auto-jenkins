@@ -36,7 +36,7 @@ COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 USER root
-RUN apk --no-cache add shadow su-exec docker groff python py-pip gettext && \
+RUN apk --no-cache add su-exec docker groff python py-pip gettext && \
     pip install awscli==1.15.21 s3cmd==2.0.1
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
