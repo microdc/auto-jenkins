@@ -43,7 +43,7 @@ main() {
     echo "${REPOS_FILE} does not exist, this should be mounted in"
   fi
 
-  # Detect host docker socker perms
+  # Detect host docker socket perms
   DOCKER_SOCKET=/var/run/docker.sock
   DOCKER_GROUP=docker
 

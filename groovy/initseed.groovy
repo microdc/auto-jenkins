@@ -15,6 +15,12 @@ import javaposse.jobdsl.plugin.JenkinsJobManagement
 
 // Set the number of Jenkins executors so master can run seed job
 Jenkins.instance.setNumExecutors(1)
+
+// Add label to master node, and make it exclusive,
+// so it only runs the seed job and no other jobs.
+Jenkins.instance.setLabelString("master")
+Jenkins.instance.setMode(hudson.model.Node.Mode.EXCLUSIVE)
+
 Jenkins.instance.save()
 
 def jenkinshome = Jenkins.getInstance().getRootDir().getPath()

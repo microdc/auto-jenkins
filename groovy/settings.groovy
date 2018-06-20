@@ -6,9 +6,6 @@ import jenkins.model.*
 import hudson.security.csrf.DefaultCrumbIssuer
 import jenkins.security.s2m.AdminWhitelistRule
 
-// Set the number of Jenkins executors
-Jenkins.instance.setNumExecutors(0)
-
 // Disable Jenkins CLI over remote
 Jenkins.instance.getDescriptor("jenkins.CLI").get().setEnabled(false)
 
