@@ -25,6 +25,8 @@ new FileNameFinder().getFileNames(jenkinshome + '/jobdsl',
 
 
 job('seed') {
+  // Run this only on the master
+  label('master')
   steps {
     systemGroovyCommand(groovy)
   }
