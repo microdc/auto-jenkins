@@ -43,7 +43,7 @@ main() {
     echo "${REPOS_FILE} does not exist, this should be mounted in"
   fi
 
-  # Detect host docker socker perms
+  # Detect host docker socket perms
   DOCKER_SOCKET=/var/run/docker.sock
   DOCKER_GROUP=docker
 
@@ -53,7 +53,7 @@ main() {
 
       # Ensure there is not an old `docker` group (DOCKER_GROUP), or an old group using
       # docker's desired GID (OLD_GROUP). `delgroup` only takes a group name so we
-      # cannot delete by GID.
+      # cannot delete by GID.
       /usr/sbin/delgroup "${DOCKER_GROUP}"
       [[ "${OLD_GROUP}" != "UNKNOWN" ]] && /usr/sbin/delgroup "${OLD_GROUP}"
 
