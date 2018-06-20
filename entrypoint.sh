@@ -43,13 +43,19 @@ main() {
     echo "${REPOS_FILE} does not exist, this should be mounted in"
   fi
 
-  #Detect host docker socker perms
+  # Detect host docker socker perms
   DOCKER_SOCKET=/var/run/docker.sock
   DOCKER_GROUP=docker
 
   if [ -S ${DOCKER_SOCKET} ]; then
       DOCKER_GID="$(stat -c '%g' ${DOCKER_SOCKET})"
+      OLD_GROUP="$(stat -c '%G' ${DOCKER_SOCKET})"
+
+      # Ensure there is not an old Docker group, or an old group using
+      # docker's desired GID.
       /usr/sbin/delgroup "${DOCKER_GROUP}"
+      [[ "${OLD_GROUP}" != "UNKNOWN" ]] && /usr/sbin/delgroup "${OLD_GROUP}"
+
       /usr/sbin/addgroup -S -g "${DOCKER_GID}" "${DOCKER_GROUP}"
       /usr/sbin/addgroup "jenkins" "${DOCKER_GROUP}"
   fi
@@ -61,4 +67,3 @@ main() {
 }
 
 main "$@"
-
