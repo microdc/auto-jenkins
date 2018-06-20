@@ -13,6 +13,10 @@ import javaposse.jobdsl.dsl.DslScriptLoader
 import javaposse.jobdsl.dsl.ScriptRequest
 import javaposse.jobdsl.plugin.JenkinsJobManagement
 
+// Set the number of Jenkins executors so master can run seed job
+Jenkins.instance.setNumExecutors(1)
+Jenkins.instance.save()
+
 def jenkinshome = Jenkins.getInstance().getRootDir().getPath()
 
 def jobManagement = new JenkinsJobManagement(System.out, [:], new File('.'))
