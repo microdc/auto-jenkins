@@ -29,19 +29,24 @@ main() {
   JENKINS_HOME="/var/jenkins_home"
   JOBDSL_DIR="${JENKINS_HOME}/jobdsl"
   REPOS_FILE="/usr/share/jenkins/data/repos.txt"
+  TEMP_REPOS_DIR="/tmp/repos"
+
+  su-exec jenkins mkdir -vp "${TEMP_REPOS_DIR}"
 
   # Get job dsl files from git repos
   if [ -f ${REPOS_FILE} ]; then
     echo "${REPOS_FILE} found!"
     su-exec jenkins mkdir -vp "${JOBDSL_DIR}"
     while IFS='' read -r repo || [[ -n "$repo" ]]; do
-      su-exec jenkins git clone --depth 1 "git@${repo}" "/tmp/${repo#*/}"
-      su-exec jenkins mv -v "/tmp/${repo#*/}/${repo#*/}.jobdsl" "${JOBDSL_DIR}"
-      rm -rfv "/tmp/${repo#*/}"
+      su-exec jenkins git clone -n --depth 1 "git@${repo}" "${TEMP_REPOS_DIR}/${repo#*/}"
+      (cd "${TEMP_REPOS_DIR}/${repo#*/}" && git checkout HEAD "${repo#*/}.jobdsl")
+      su-exec jenkins mv -v "${TEMP_REPOS_DIR}/${repo#*/}/${repo#*/}.jobdsl" "${JOBDSL_DIR}"
     done < "${REPOS_FILE}"
   else
     echo "${REPOS_FILE} does not exist, this should be mounted in"
   fi
+
+  rm -rf "${TEMP_REPOS_DIR}" && echo "Cleaned TEMP_REPOS_DIR" &
 
   # Detect host docker socket perms
   DOCKER_SOCKET=/var/run/docker.sock
