@@ -32,9 +32,6 @@ COPY groovy /usr/share/jenkins/ref/init.groovy.d/
 # Copy seed job to bootstrap all jobdsl jobs
 COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 
-# Custom entry point to allow for download of jobdsl files from repos
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
 USER root
 RUN apk --no-cache add su-exec docker groff python py-pip gettext && \
     pip install awscli==1.15.21 s3cmd==2.0.1
@@ -45,5 +42,7 @@ COPY modprobe.sh /usr/local/bin/modprobe
 #Install kubectl
 RUN curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.2/bin/linux/amd64/kubectl && chmod +x /usr/bin/kubectl
 
+# Custom entry point to allow for download of jobdsl files from repos
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
