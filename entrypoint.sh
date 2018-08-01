@@ -31,6 +31,8 @@ main() {
   REPOS_FILE="/usr/share/jenkins/data/repos.txt"
   TEMP_REPOS_DIR="/tmp/repos"
 
+  echo "$(date) START JENKINS SETUP"
+
   su-exec jenkins mkdir -vp "${TEMP_REPOS_DIR}"
 
   # Get job dsl files from git repos
@@ -73,7 +75,7 @@ main() {
       /usr/sbin/addgroup "jenkins" "${DOCKER_GROUP}"
   fi
 
-  echo "START JENKINS:"
+  echo "$(date) START JENKINS:"
 
   /bin/bash -c "su-exec jenkins /usr/local/bin/jenkins.sh ${JENKINS_PARAMS}"
 
