@@ -22,7 +22,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: jenkins-master
-          image: microdc/k8s-jenkins:2.4.0
+          image: microdc/k8s-jenkins:2.6.5
           ports:
             - containerPort: 8080
             - containerPort: 50000
@@ -100,7 +100,7 @@ metadata:
   name: jenkins-slave
   namespace: jenkins
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
