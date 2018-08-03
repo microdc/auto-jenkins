@@ -33,7 +33,7 @@ COPY groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 
 USER root
-RUN apk --no-cache add su-exec docker groff python py-pip gettext && \
+RUN apk --no-cache add su-exec docker groff python py-pip gettext procps && \
     pip install awscli==1.15.21 s3cmd==2.0.1
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
