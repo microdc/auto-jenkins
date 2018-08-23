@@ -34,7 +34,9 @@ COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 
 USER root
 RUN apk --no-cache add su-exec docker groff python py-pip gettext procps && \
-    pip install awscli==1.15.21 s3cmd==2.0.1
+    apk --no-cache add --virtual=build gcc libffi-dev musl-dev openssl-dev python-dev python3-dev make && \
+    pip install awscli s3cmd azure-cli && \
+    apk del --purge build
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 COPY modprobe.sh /usr/local/bin/modprobe
