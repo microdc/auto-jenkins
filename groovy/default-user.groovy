@@ -19,7 +19,7 @@ reg_user.save()
 
 jenkins.getAuthorizationStrategy().add(Jenkins.ADMINISTER, env.JENKINS_USER)
 def strategy = new GlobalMatrixAuthorizationStrategy()
-    strategy.add(Jenkins.ADMINISTER, 'admin')
+    strategy.add(Jenkins.ADMINISTER, env.JENKINS_USER)
     strategy.add(Jenkins.ADMINISTER, 'registrator')
 
 jenkins.setAuthorizationStrategy(strategy)
