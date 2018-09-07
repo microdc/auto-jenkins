@@ -18,7 +18,7 @@ cucumber-reports:3.19.1
 display-url-api:2.2.0
 docker-commons:1.13
 docker-workflow:1.17
-durable-task:1.23
+durable-task:1.22
 external-monitor-job:1.7
 git-client:2.7.3
 git-parameter:0.9.3
