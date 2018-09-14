@@ -1,7 +1,7 @@
 /*
 Setting Global properties (Environment variables)
 */
-@Grab('org.yaml:snakeyaml:1.17')
+@Grab('org.yaml:snakeyaml:1.18')
 import hudson.slaves.EnvironmentVariablesNodeProperty
 import jenkins.model.Jenkins
 import org.yaml.snakeyaml.Yaml
