@@ -33,6 +33,7 @@ groovy:2.0
 handlebars:1.1.1
 handy-uri-templates-2-api:2.1.6-1.0
 htmlpublisher:1.16
+http_request:1.8.22
 jackson2-api:2.8.11.3
 javadoc:1.4
 jdk-tool:1.1
