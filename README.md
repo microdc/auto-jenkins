@@ -10,6 +10,11 @@ Available on [Docker hub](https://hub.docker.com/r/microdc/k8s-jenkins/)
     * [Deploy on Kubernetes](#deploy-on-kubernetes)
     * [Generate plugins.txt](#generate-pluginstxt)
 
+## Pull
+The image is built at Dockerhub: https://hub.docker.com/r/microdc/k8s-jenkins/
+This is a public repo so can be launched as microdc/k8s-jenkins:<tag>, e.g.
+microdc/k8s-jenkins:2.6.12
+
 ## Build
 
 ```
