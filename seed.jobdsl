@@ -6,6 +6,8 @@ import javaposse.jobdsl.dsl.DslScriptLoader
 import javaposse.jobdsl.dsl.ScriptRequest
 import javaposse.jobdsl.plugin.JenkinsJobManagement
 
+println "/usr/local/bin/download-jobdsl.sh".execute().text
+
 def jenkinshome = Jenkins.getInstance().getRootDir().getPath()
 
 def jobManagement = new JenkinsJobManagement(System.out, [:], new File('.'))

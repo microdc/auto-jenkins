@@ -35,6 +35,7 @@ COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 USER root
 RUN apk --no-cache add su-exec docker groff python py-pip gettext procps && \
     apk --no-cache add --virtual=build gcc libffi-dev musl-dev openssl-dev python-dev python3-dev make && \
+    pip install --upgrade pip && \
     pip install awscli s3cmd azure-cli && \
     apk del --purge build
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
@@ -46,5 +47,6 @@ RUN curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-releas
 
 # Custom entry point to allow for download of jobdsl files from repos
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY download-jobdsl.sh /usr/local/bin/download-jobdsl.sh
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
