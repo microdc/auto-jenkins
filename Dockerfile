@@ -15,6 +15,8 @@ USER jenkins
 # Set the default admin user and password
 ENV JENKINS_USER admin
 ENV JENKINS_PASS admin
+ENV PIP_VERSION=18.0
+ENV AZURE_CLI_VERSION=2.0.47
 
 # Set log level
 COPY log.properties /var/jenkins_home/log.properties
@@ -35,7 +37,8 @@ COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 USER root
 RUN apk --no-cache add su-exec docker groff python py-pip gettext procps jq && \
     apk --no-cache add --virtual=build gcc libffi-dev musl-dev openssl-dev python-dev python3-dev make && \
-    pip install awscli s3cmd azure-cli && \
+    pip install pip==${PIP_VERSION} && \
+    pip install awscli s3cmd azure-cli==${AZURE_CLI_VERSION} && \
     apk del --purge build
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
