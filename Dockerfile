@@ -33,7 +33,7 @@ COPY groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY seed.jobdsl /usr/share/jenkins/ref/jobdsl/seed.jobdsl
 
 USER root
-RUN apk --no-cache add su-exec docker groff python py-pip gettext procps && \
+RUN apk --no-cache add su-exec docker groff python py-pip gettext procps jq && \
     apk --no-cache add --virtual=build gcc libffi-dev musl-dev openssl-dev python-dev python3-dev make && \
     pip install awscli s3cmd azure-cli && \
     apk del --purge build
