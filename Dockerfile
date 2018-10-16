@@ -49,5 +49,6 @@ RUN curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-releas
 
 # Custom entry point to allow for download of jobdsl files from repos
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY download-jobdsl.sh /usr/local/bin/download-jobdsl.sh
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
