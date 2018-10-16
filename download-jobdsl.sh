@@ -53,7 +53,7 @@ get_job_dslfiles() {
 }
 
 main() {
-	get_job_dslfiles
+  get_job_dslfiles
 }
 
 main "$@"
