@@ -6,6 +6,20 @@ import javaposse.jobdsl.dsl.DslScriptLoader
 import javaposse.jobdsl.dsl.ScriptRequest
 import javaposse.jobdsl.plugin.JenkinsJobManagement
 
+def command = "/usr/local/bin/download-jobdsl.sh"
+def proc = command.execute()
+proc.waitFor()
+
+println "Std Err: ${proc.err.text}"
+println "Std Out: ${proc.in.text}"
+println "Process exit code: ${proc.exitValue()}"
+
+if (proc.exitValue() != 0){
+  println "FAILED to process new jobs!"
+  return 1
+}
+
+
 def jenkinshome = Jenkins.getInstance().getRootDir().getPath()
 
 def jobManagement = new JenkinsJobManagement(System.out, [:], new File('.'))
