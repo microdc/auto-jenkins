@@ -8,7 +8,7 @@ import javaposse.jobdsl.plugin.JenkinsJobManagement
 
 def command = "/usr/local/bin/download-jobdsl.sh"
 def proc = command.execute()
-foo = proc.waitFor()
+proc.waitFor()
 
 println "Std Err: ${proc.err.text}"
 println "Std Out: ${proc.in.text}"
