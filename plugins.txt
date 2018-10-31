@@ -44,6 +44,7 @@ jsch:0.1.54.2
 junit:1.24
 ldap:1.20
 mailer:1.21
+mask-passwords:2.12.0
 matrix-auth:2.3
 matrix-project:1.13
 maven-plugin:3.1.2
