@@ -14,13 +14,14 @@ import javaposse.jobdsl.dsl.ScriptRequest
 import javaposse.jobdsl.plugin.JenkinsJobManagement
 
 // Set the number of Jenkins executors so master can run seed job
-Jenkins.instance.setNumExecutors(1)
+def numberOfExecutors = System.getenv("NUMBER_OF_EXECUTORS")?.isInteger() ? System.getenv("NUMBER_OF_EXECUTORS").toInteger(): 1
+Jenkins.instance.setNumExecutors(numberOfExecutors)
 
 // Add label to master node, and make it exclusive,
 // so it only runs the seed job and no other jobs.
 Jenkins.instance.setLabelString("master")
 
-if(!Boolean.valueOf(System.getenv("DISABLE_EXCLUSIVE_MASTER"))) {
+if(!System.getenv("DISABLE_EXCLUSIVE_MASTER").toBoolean()) {
     Jenkins.instance.setMode(hudson.model.Node.Mode.EXCLUSIVE)
 }
 
