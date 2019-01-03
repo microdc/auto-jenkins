@@ -1,6 +1,17 @@
 /*
 Setting Global properties (Environment variables)
 */
+
+proxyHost = System.getenv("HTTP_PROXY_HOST")
+proxyPort = System.getenv("HTTP_PROXY_PORT")
+
+if (proxyHost && proxyPort) {
+    System.properties.putAll([
+        'http.proxyHost':"${proxyHost}",
+        'http.proxyPort':"${proxyPort}"
+    ])
+}
+
 @Grab('org.yaml:snakeyaml:1.18')
 import hudson.slaves.EnvironmentVariablesNodeProperty
 import jenkins.model.Jenkins
