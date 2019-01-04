@@ -21,7 +21,7 @@ Jenkins.instance.setNumExecutors(numberOfExecutors)
 // so it only runs the seed job and no other jobs.
 Jenkins.instance.setLabelString("master")
 
-if (System.getenv("DISABLE_EXCLUSIVE_MASTER") ? System.getenv("DISABLE_EXCLUSIVE_MASTER").toBoolean(): true) {
+if (! System.getenv("DISABLE_EXCLUSIVE_MASTER") ? System.getenv("DISABLE_EXCLUSIVE_MASTER").toBoolean(): true) {
     Jenkins.instance.setMode(hudson.model.Node.Mode.EXCLUSIVE)
 }
 
