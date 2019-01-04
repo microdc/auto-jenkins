@@ -91,9 +91,9 @@ kubectl create secret generic jenkins-ssh-config -n jenkins \
 kubectl create secret generic jenkins-admin-creds -n jenkins --from-literal=username=admin --from-literal=password=admin
 ```
 
-6. Add additional secrets to jenkins environment variables (key: value)
+6. Add additional secrets to jenkins environment variables (key=value)
 ```
-kubectl create secret generic jenkins-secret-env-vars -n jenkins --from-file="secrets.yaml"
+kubectl create secret generic jenkins-secret-env-vars -n jenkins --from-file="secrets.properties"
 ```
 
 7. Access using the jenkins UI
@@ -122,4 +122,3 @@ curl -sSL "http://$JENKINS_HOST/pluginManager/api/xml?depth=1&xpath=/*/*/shortNa
           perl -pe 's/.*?<shortName>([\w-]+).*?<version>([^<]+)()(<\/\w+>)+/\1 \2\n/g'|sed 's/ /:/' | \
           sort
 ```
-
