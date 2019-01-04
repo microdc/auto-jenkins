@@ -2,20 +2,8 @@
 Setting Global properties (Environment variables)
 */
 
-proxyHost = System.getenv("HTTP_PROXY_HOST")
-proxyPort = System.getenv("HTTP_PROXY_PORT")
-
-if (proxyHost && proxyPort) {
-    System.properties.putAll([
-        'http.proxyHost':"${proxyHost}",
-        'http.proxyPort':"${proxyPort}"
-    ])
-}
-
-@Grab('org.yaml:snakeyaml:1.18')
 import hudson.slaves.EnvironmentVariablesNodeProperty
 import jenkins.model.Jenkins
-import org.yaml.snakeyaml.Yaml
 
 instance = Jenkins.getInstance()
 globalNodeProperties = instance.getGlobalNodeProperties()
@@ -34,12 +22,12 @@ if ( envVarsNodePropertyList == null || envVarsNodePropertyList.size() == 0 ) {
 println "Setting Global properties (Environment variables)"
 envVars.put("AWS_DEFAULT_REGION", "eu-west-1")
 
-// Load secrets if secrets.yaml is present
-def secretsfile = new File( '/usr/share/jenkins/secrets/secrets.yaml' )
-if( secretsfile.exists() ) {
-  Yaml parser = new Yaml()
-  HashMap secrets = parser.load(secretsfile.text)
-  secrets.each{ k, v -> envVars.put(k, v) }
+// Load secrets if secrets.properties is present
+def secretsFile = new File( '/usr/share/jenkins/secrets/secrets.properties' )
+if( secretsFile.exists() ) {
+  Properties properties = new Properties()
+  properties.load(secretsFile.newDataInputStream())
+  properties.each{ k, v -> envVars.put(k, v) }
 }
 
 instance.save()
