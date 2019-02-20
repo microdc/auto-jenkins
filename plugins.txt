@@ -72,7 +72,7 @@ resource-disposer:0.8
 role-strategy:2.8.1
 run-condition:1.0
 scm-api:2.2.7
-script-security:1.50
+script-security:1.53
 ssh-credentials:1.13
 structs:1.14
 throttle-concurrents:2.0.1
