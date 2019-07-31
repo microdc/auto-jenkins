@@ -18,8 +18,8 @@ main () {
   check_dependency docker
 
   VERSION=${VERSION-'latest'}
-  docker build --rm -t "microdc/k8s-jenkins:${VERSION}" .
-  docker tag "microdc/k8s-jenkins:${VERSION}" "microdc/k8s-jenkins:latest"
+  docker build --rm -t "microdc/auto-jenkins:${VERSION}" .
+  docker tag "microdc/auto-jenkins:${VERSION}" "microdc/auto-jenkins:latest"
 }
 
 main
