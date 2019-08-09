@@ -8,7 +8,7 @@ RUN ./test.sh
 # Skip initial setup
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
-FROM jenkins/jenkins:2.162-alpine
+FROM jenkins/jenkins:2.189-alpine
 
 USER jenkins
 
