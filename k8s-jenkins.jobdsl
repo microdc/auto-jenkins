@@ -1,4 +1,4 @@
-def appName = 'k8s-jenkins'
+def appName = 'auto-jenkins'
 def gitProvider = 'github.com'
 def appRepo = "microdc/${appName}"
 
