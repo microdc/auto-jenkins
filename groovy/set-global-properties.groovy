@@ -20,7 +20,6 @@ if ( envVarsNodePropertyList == null || envVarsNodePropertyList.size() == 0 ) {
   envVars = envVarsNodePropertyList.get(0).getEnvVars()
 }
 println "Setting Global properties (Environment variables)"
-envVars.put("AWS_DEFAULT_REGION", "eu-west-1")
 
 // Load secrets if secrets.properties is present
 def secretsFile = new File( '/usr/share/jenkins/secrets/secrets.properties' )
